@@ -487,6 +487,8 @@ module Puma
             next_request_ready = with_force_shutdown(client) do
               client.reset(fast_check)
             end
+            
+            puts "Next request is ready: #{next_request_ready}"
 
             unless next_request_ready
               break unless @queue_requests
@@ -498,6 +500,7 @@ module Puma
             end
           end
         end
+        puts "Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
         true
       rescue StandardError => e
         client_error(e, client, requests)
