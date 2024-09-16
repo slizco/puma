@@ -466,9 +466,11 @@ module Puma
           @requests_count += 1
           case handle_request(client, requests + 1)
           when false
+            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
             break
           when :async
             close_socket = false
+            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
             break
           when true
             ThreadPool.clean_thread_locals if clean_thread_locals
