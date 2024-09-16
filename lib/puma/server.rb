@@ -488,7 +488,7 @@ module Puma
               client.reset(fast_check)
             end
             
-            puts "Next request is ready: #{next_request_ready}"
+            puts "Next request is ready: #{!next_request_ready.empty?}"
 
             unless next_request_ready
               break unless @queue_requests
