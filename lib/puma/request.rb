@@ -615,8 +615,11 @@ module Puma
       # if running without request queueing
       resp_info[:keep_alive] &&= @queue_requests
 
+      puts "KEEPALIVE AFTER ANDING QUEUE REQUESTS: #{resp_info[:keep_alive]}"
+
       # see prepare_response
       resp_info[:keep_alive] &&= force_keep_alive
+      puts "KEEPALIVE AFTER ANDING FORCE KEEPALIVE: #{resp_info[:keep_alive]}"
 
       resp_info[:response_hijack] = nil
 
