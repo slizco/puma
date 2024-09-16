@@ -172,7 +172,7 @@ module Puma
 
       resp_info = str_headers(env, status, headers, res_body, io_buffer, force_keep_alive)
 
-      puts "FORCE KEEPALIVE BASED ON HEADERS: #{force_keep_alive}"
+      puts "KEEPALIVE BASED ON HEADERS: #{resp_info[:keep_alive]}"
 
       close_body = false
       response_hijack = nil
