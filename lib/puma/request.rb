@@ -168,7 +168,11 @@ module Puma
         @thread_pool.busy_threads < @max_threads ||
         !client.listener.to_io.wait_readable(0)
 
+      puts "FORCE KEEPALIVE BASED ON REQUESTS & THREADS: #{force_keep_alive}"
+
       resp_info = str_headers(env, status, headers, res_body, io_buffer, force_keep_alive)
+
+      puts "FORCE KEEPALIVE BASED ON HEADERS: #{force_keep_alive}"
 
       close_body = false
       response_hijack = nil
