@@ -663,8 +663,10 @@ module Puma
       # Only set the header if we're doing something which is not the default
       # for this protocol version
       if http_11
+        puts "This is and HTTP 1.1 connection, keep_alive: #{resp_info[:keep_alive]}."
         io_buffer << CONNECTION_CLOSE if !resp_info[:keep_alive]
       else
+        puts "This is and HTTP 1.0 connection, keep_alive: #{resp_info[:keep_alive]}."
         io_buffer << CONNECTION_KEEP_ALIVE if resp_info[:keep_alive]
       end
       resp_info
