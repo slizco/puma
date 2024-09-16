@@ -580,6 +580,7 @@ module Puma
       resp_info[:no_body] = env[REQUEST_METHOD] == HEAD
 
       http_11 = env[SERVER_PROTOCOL] == HTTP_11
+      puts "HTTP CONNECTION: #{env.fetch(HTTP_CONNECTION, "")}"
       if http_11
         resp_info[:allow_chunked] = true
         resp_info[:keep_alive] = env.fetch(HTTP_CONNECTION, "").downcase != CLOSE
@@ -613,12 +614,14 @@ module Puma
 
       # regardless of what the client wants, we always close the connection
       # if running without request queueing
+      puts "QUEUE REQUESTS: #{@queue_requests}"
       resp_info[:keep_alive] &&= @queue_requests
 
       puts "KEEPALIVE AFTER ANDING QUEUE REQUESTS: #{resp_info[:keep_alive]}"
 
       # see prepare_response
       resp_info[:keep_alive] &&= force_keep_alive
+      puts "FORCE KEEP ALIVE: #{force_keep_alive}"
       puts "KEEPALIVE AFTER ANDING FORCE KEEPALIVE: #{resp_info[:keep_alive]}"
 
       resp_info[:response_hijack] = nil
