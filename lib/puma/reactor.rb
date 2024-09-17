@@ -51,6 +51,7 @@ module Puma
       @selector.wakeup
       true
     rescue ClosedQueueError, IOError # Ignore if selector is already closed
+      puts "Unable to add client back to reactor"
       false
     end
 
