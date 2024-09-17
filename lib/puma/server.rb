@@ -495,7 +495,9 @@ module Puma
             unless next_request_ready
               break unless @queue_requests
               client.set_timeout @persistent_timeout
+              puts "INSIDE UNLESS next request ready"
               if @reactor.add client
+                puts "ADDED CLIENT BACK TO REACTOR"
                 close_socket = false
                 break
               end
