@@ -124,6 +124,8 @@ module Puma
       @requests_count = 0
 
       @idle_timeout_reached = false
+
+      @kept_alive = 0
     end
 
     def inherit_binder(bind)
@@ -462,8 +464,6 @@ module Puma
           client.finish(@first_data_timeout)
         end
 
-        kept_alive = 0
-
         while true
           @requests_count += 1
           case handle_request(client, requests + 1)
@@ -475,8 +475,8 @@ module Puma
             #puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: 1"
             break
           when true
-            kept_alive += 1
-            puts "Connections kept-alive: #{kept_alive}"
+            @kept_alive += 1
+            puts "Connections kept-alive: #{@kept_alive}"
             #puts "TRUE: connection kept open, now do fast check"
             ThreadPool.clean_thread_locals if clean_thread_locals
 
