@@ -466,11 +466,11 @@ module Puma
           @requests_count += 1
           case handle_request(client, requests + 1)
           when false
-            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: #{@requests_count}"
+            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: 1}"
             break
           when :async
             close_socket = false
-            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: #{@requests_count}"
+            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: 1"
             break
           when true
             puts "TRUE: connection kept open, now do fast check"
