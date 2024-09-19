@@ -171,7 +171,7 @@ module Puma
         thread_pool_condition ||
         listener_readable_condition
         
-      unless force_keep_alive
+      if force_keep_alive
         puts "FORCE KEEPALIVE: #{force_keep_alive}. (requests < @max_fast_inline): #{request_condition}, (@thread_pool.busy_threads < @max_threads): #{thread_pool_condition}, (!client.listener.to_io.wait_readable(0)): #{listener_readable_condition}"
       end
 
