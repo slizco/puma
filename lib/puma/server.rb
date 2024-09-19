@@ -462,18 +462,22 @@ module Puma
           client.finish(@first_data_timeout)
         end
 
+        kept_alive = 0
+
         while true
           @requests_count += 1
           case handle_request(client, requests + 1)
           when false
-            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: 1}"
+            #puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: 1"
             break
           when :async
             close_socket = false
-            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: 1"
+            #puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: 1"
             break
           when true
-            puts "TRUE: connection kept open, now do fast check"
+            kept_alive += 1
+            puts "Connections kept-alive: #{kept_alive}"
+            #puts "TRUE: connection kept open, now do fast check"
             ThreadPool.clean_thread_locals if clean_thread_locals
 
             requests += 1
@@ -501,7 +505,7 @@ module Puma
             end
           end
         end
-        puts "Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
+        # "Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
         true
       rescue StandardError => e
         client_error(e, client, requests)
