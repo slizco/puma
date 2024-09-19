@@ -466,13 +466,14 @@ module Puma
           @requests_count += 1
           case handle_request(client, requests + 1)
           when false
-            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
+            puts "FALSE: Returning with closing socket: #{close_socket}. Processed requests: #{@requests_count}"
             break
           when :async
             close_socket = false
-            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: #{requests}"
+            puts "ASYNC: Returning with closing socket: #{close_socket}. Processed requests: #{@requests_count}"
             break
           when true
+            puts "TRUE: connection kept open, now do fast check"
             ThreadPool.clean_thread_locals if clean_thread_locals
 
             requests += 1
@@ -489,15 +490,11 @@ module Puma
             next_request_ready = with_force_shutdown(client) do
               client.reset(fast_check)
             end
-            
-            puts "Next request is ready: #{!next_request_ready.nil?}"
 
             unless next_request_ready
               break unless @queue_requests
               client.set_timeout @persistent_timeout
-              puts "INSIDE UNLESS next request ready"
               if @reactor.add client
-                puts "ADDED CLIENT BACK TO REACTOR"
                 close_socket = false
                 break
               end
